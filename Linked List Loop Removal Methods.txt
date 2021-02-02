@@ -1,0 +1,54 @@
+Loop Removal in Linked List
+ Method 1: CHECK BY ONE
+1) Take 2 pointers ptr1 points to head and ptr2 points to loopnode
+2) increment ptr2 on two coditions
+     (i)until it's next will be loopnode again
+     (ii)until its next will be ptr1
+3) when both these conditions will be true it means at that point both ptr1 and ptr2
+   are next two each other and now we need to remove loop by setting 
+     ptr2- >next=NULL , now loop is removed
+      
+void removeloop(Node* loopnode,Node* head)
+{
+    Node* ptr1=head;
+    Node* ptr2=NULL;
+    while(1)
+    {
+        ptr2=loopnode;
+        while(ptr2->next!=loopnode && ptr2->next!=ptr1)
+        ptr2=ptr2->next;
+        if(ptr2->next==ptr1)
+        break;
+        ptr1=ptr1->next;
+    }
+    ptr2->next=NULL;
+}
+int detect_and_remove_loop(Node* head)
+{
+    Node* slowptr=head;
+    Node* fastptr=head;
+    while(slowptr->next)
+    {
+        slowptr=slowptr->next;
+        fastptr=fastptr->next->next;
+        if(slowptr==fastptr)
+        {
+            removeloop(slowptr,head);
+            return 1;                    //loop found
+        }
+    }
+    return 0;                           //loop not found
+
+}
+ 
+
+ Method 2 :
+1) set two pointers at loopnode
+2) now count no. of nodes in the loop by using these two nodes, increment ptr1 until its next
+   will be ptr2 
+3) store no. of nodes in k
+4) set ptr1 at the head now and ptr2 at k nodes ahead of the ptr1
+5) move ptr1 and ptr2 both in forward direction until they meet, the point where they meet is 
+   the starting of the loop
+6) now move ptr2 until ptr2->next is ptr1(at loop's last node),we need to disconnect this ptr2
+   from ptr1 so put ptr2->next=NULL, now loop is removed
